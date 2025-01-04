@@ -102,6 +102,41 @@ class AssetPicker extends StatelessWidget {
   Widget _buildBody(BuildContext context) {
     return Observer(
       builder: (context) {
+        if (_store.permissionState == AppPermissionState.denied) {
+          return Center(
+            child: SizedBox(
+              width: 240,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    config.permissionDeniedText,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  GestureDetector(
+                    onTap: () => _store.openAppSettings(),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: config.selectIndicatorColor,
+                        borderRadius: BorderRadius.circular(22),
+                      ),
+                      height: 44,
+                      alignment: Alignment.center,
+                      child: Text(
+                        config.permissionDeniedButtonText,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
         if (_store.loadingStatus == LoadingStatus.loading) {
           return Center(
             child: SizedBox(

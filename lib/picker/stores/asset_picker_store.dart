@@ -16,6 +16,12 @@ enum LoadingStatus {
   error,
 }
 
+enum AppPermissionState {
+  authorized,
+  denied,
+  notDetermined,
+}
+
 class AssetPickerStore = AssetPickerStoreBase with _$AssetPickerStore;
 
 abstract class AssetPickerStoreBase with Store {
@@ -46,6 +52,9 @@ abstract class AssetPickerStoreBase with Store {
   @readonly
   int _maxSelection = 9;
 
+  @readonly
+  AppPermissionState _permissionState = AppPermissionState.notDetermined;
+
   Future<void> config({
     required AssetPickerConfig config,
   }) async {
@@ -61,18 +70,24 @@ abstract class AssetPickerStoreBase with Store {
   Future<void> refreshAssets() async {
     if (_loadingStatus == LoadingStatus.loading || _loadingStatus == LoadingStatus.loadingMore) return;
     _loadingStatus = LoadingStatus.loading;
-    final assets = await PhotoManager.getAssetListRange(
-      type: RequestType.image,
-      start: _offset,
-      end: _offset + limit,
-    );
-    _loadedAssets = ObservableList.of(assets);
-    if (assets.isEmpty) {
-      _loadingStatus = LoadingStatus.noContent;
-    } else if (assets.length < limit) {
-      _loadingStatus = LoadingStatus.noMore;
+    final result = await PhotoManager.requestPermissionExtend();
+    if (result == PermissionState.authorized) {
+      _permissionState = AppPermissionState.authorized;
+      final assets = await PhotoManager.getAssetListRange(
+        type: RequestType.image,
+        start: _offset,
+        end: _offset + limit,
+      );
+      _loadedAssets = ObservableList.of(assets);
+      if (assets.isEmpty) {
+        _loadingStatus = LoadingStatus.noContent;
+      } else if (assets.length < limit) {
+        _loadingStatus = LoadingStatus.noMore;
+      } else {
+        _loadingStatus = LoadingStatus.complete;
+      }
     } else {
-      _loadingStatus = LoadingStatus.complete;
+      _permissionState = AppPermissionState.denied;
     }
   }
 
@@ -109,6 +124,11 @@ abstract class AssetPickerStoreBase with Store {
       }
       _selectedAssetIds.add(asset.id);
     }
+  }
+
+  @action
+  Future<void> openAppSettings() async {
+    await PhotoManager.openSetting();
   }
 
   @action

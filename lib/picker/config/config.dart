@@ -11,7 +11,8 @@ class AssetPickerConfig {
   final Color selectCountColor;
   final Color loadingIndicatorColor;
   final Color imagePlaceholderColor;
-
+  final String permissionDeniedText;
+  final String permissionDeniedButtonText;
   AssetPickerConfig({
     this.maxSelection = 9,
     this.initialSelectedAssets,
@@ -21,6 +22,8 @@ class AssetPickerConfig {
     this.selectCountColor = const Color(0xFFFFFFFF),
     this.loadingIndicatorColor = const Color(0xFF1DC19A),
     this.imagePlaceholderColor = const Color(0xFFFAFAFA),
+    this.permissionDeniedText = 'Please grant permission to access your photo library',
+    this.permissionDeniedButtonText = 'Open Settings',
   });
 
   static AssetPickerConfig get instance => _instance;

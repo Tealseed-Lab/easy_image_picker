@@ -119,6 +119,24 @@ mixin _$AssetPickerStore on AssetPickerStoreBase, Store {
     });
   }
 
+  late final _$_permissionStateAtom =
+      Atom(name: 'AssetPickerStoreBase._permissionState', context: context);
+
+  AppPermissionState get permissionState {
+    _$_permissionStateAtom.reportRead();
+    return super._permissionState;
+  }
+
+  @override
+  AppPermissionState get _permissionState => permissionState;
+
+  @override
+  set _permissionState(AppPermissionState value) {
+    _$_permissionStateAtom.reportWrite(value, super._permissionState, () {
+      super._permissionState = value;
+    });
+  }
+
   late final _$refreshAssetsAsyncAction =
       AsyncAction('AssetPickerStoreBase.refreshAssets', context: context);
 
@@ -141,6 +159,14 @@ mixin _$AssetPickerStore on AssetPickerStoreBase, Store {
   @override
   Future<void> selectAsset(AssetEntity asset) {
     return _$selectAssetAsyncAction.run(() => super.selectAsset(asset));
+  }
+
+  late final _$openAppSettingsAsyncAction =
+      AsyncAction('AssetPickerStoreBase.openAppSettings', context: context);
+
+  @override
+  Future<void> openAppSettings() {
+    return _$openAppSettingsAsyncAction.run(() => super.openAppSettings());
   }
 
   late final _$AssetPickerStoreBaseActionController =
