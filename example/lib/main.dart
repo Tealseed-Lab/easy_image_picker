@@ -1,3 +1,4 @@
+import 'package:easy_image_picker/picker/config/config.dart';
 import 'package:easy_image_picker/picker/widgets/asset_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,12 @@ class MyHomePage extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () async {
-            final result = await showAssetPicker(context);
+            final result = await showAssetPicker(
+              context,
+              config: AssetPickerConfig(
+                maxSelection: 9,
+              ),
+            );
             if (kDebugMode) {
               print(result);
             }
