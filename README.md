@@ -11,9 +11,9 @@
 
 ```dart
 showAssetPicker(
-              context,
-              config: AssetPickerConfig(
-                maxSelection: 9,
-              ),
-            )
+  context,
+  config: AssetPickerConfig(
+    maxSelection: 9,
+  ),
+)
 ```

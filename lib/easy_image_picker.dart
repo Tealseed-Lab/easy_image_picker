@@ -1,5 +1,5 @@
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+library easy_asset_picker;
+
+export '/picker/config/config.dart';
+export '/picker/models/asset_image.dart';
+export '/picker/widgets/asset_picker.dart';
